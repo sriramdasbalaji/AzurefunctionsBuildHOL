@@ -6,7 +6,7 @@ Azure Functions is a [serverless](https://azure.microsoft.com/overview/serverles
 
 OR --->
 
-Azure Functions is an event driven, compute-on-demand experience that extends the existing Azure application platform with capabilities to implement the code triggered by events occurring in Azure or third-party service as well as on-premises systems. Azure Functions allows developers to take action by connecting to data sources or messaging solutions thus making it easy to process and react to events. Developers can leverage Azure Functions to build HTTP-based API endpoints accessible by a wide range of applications, mobile and IoT devices.
+**Azure Functions** is an event driven, compute-on-demand experience that extends the existing Azure application platform with capabilities to implement the code triggered by events occurring in Azure or third-party service as well as on-premises systems. Azure Functions allows developers to take action by connecting to data sources or messaging solutions thus making it easy to process and react to events. Developers can leverage Azure Functions to build HTTP-based API endpoints accessible by a wide range of applications, mobile and IoT devices.
  
 **Scenario for the lab:** In this lab, we are using a fictional eCommerce website - PartsUnlimited. The PartsUnlimited team decides to roll out a new feature called **special discount for *employees of PartsUnlimited*** and a **different discount for *general users***. In this lab, we will implement a .Net Core Web API which will contain information about products and price (including discounts) and an Azure Functions which acts as a switching mechanism to return different (discount) information based on the user logged in to the application.
 
@@ -14,40 +14,47 @@ Azure Functions is an event driven, compute-on-demand experience that extends th
 
  In this lab, you will
 
-* Create a Visual Studio Team Services account
+* Create a **Visual Studio Team Services** account
 * Clone the PartsUnlimited project from GitHub
-* Setup Azure Function in Azure portal
-* Create a Azure Functions project in Visual Studio
+* Setup **Azure Function** in Azure portal
+* Create a **Azure Functions** project in Visual Studio
 
-* Setup a build definition in VSTS to build and test the code
-* Configure a CD pipeline in VSTS for Website, API and Azure Functions
+* Setup a build definition in **Visual Studio Team Services** to build and test the code
+* Configure a CD pipeline in **Visual Studio Team Services** for Website, API and Azure Functions
 
 ## Setting up the environment
 
 ### Part A: Provision the required Azure resources
 1. Open Internet Explorer from the taskbar.
 1. Navigate to [https://portal.azure.com](https://portal.azure.com)
-1. Login with the following username and password user165842@cloudplatimmersionlabs.onmicrosoft.com  Dx-$V{#.:Sy+ and click Sign in
+1. Login with the following username and password 
+
+   > Username: ++@lab.CloudPortalCredential(1).Username++
+
+   > Password: ++@lab.CloudPortalCredential(1).Password++
 
 
-1. Open a new tab in internet explorer and enter https://goo.gl/octfDu
+1. Open a new tab in internet explorer and enter **https://goo.gl/octfDu**
 to open an ARM template for creating required App Services.
-1. For the **Resource Group** field, select **Use exisiting** and pick @lab.Resource group from the dropdown
+1. For the **Resource Group** field, select **Use exisiting** and pick 
+@lab.CloudResourceGroup(268).Name from the dropdown
 
-1. Agree to the Terms and conditions and click Purchase. It should take approximately 1-2 minutes to provision the resources. Once the deployment is successful, you will see the resources as shown.
+1. Agree to the Terms and conditions and click **Purchase**. It should take approximately 1-2 minutes to provision the resources. Once the deployment is successful, you will see the resources as shown.
    ![azure_resources](images/azure_resources.png)
   
-  ### Part B: Create VSTS account
+  ### Part B: Create Visual Studio Team Services account
   1. Navigate to https://www.visualstudio.com/team-services/ in a separate tab. Select **Get Started for Free**.
   1. You can use the same credentials used above to log in to Azure
-  
-  1. Provide a name for your VSTS account and click Continue to start the creation process
+     > Username: ++@lab.CloudPortalCredential(1).Username++
+
+     > Password: ++@lab.CloudPortalCredential(1).Password++
+  1. Provide a name for your Visual Studio Team Services account and click **Continue** to start the creation process
   1. In 1-2 minutes your account should be ready with a default project **MyFirstProject** created.
 
 ### Part C: Import and clone the project repository
 
-1. Navigate to the **Code** hub. As you have not created any code yet you should see an empty repository. You can clone the remote repository to your local machine and start adding code. You can also import code from an another repository if you have existing code. For the purpose of this lab we will import it from GitHub.
-1. Select **import** and enter https://github.com/sriramdasbalaji/AzureFunctionsBuild.git in the Clone URL field and select **Import**
+1. Navigate to the **Code** hub. As you have not created any code yet you should see an empty repository. You can clone the remote repository to your local machine and start adding code. You can also import code from an another repository if you have existing code. For the purpose of this lab we will import it from **GitHub**.
+1. Select **import** and enter https://github.com/sriramdasbalaji/AzureFunctionsBuild.git in the **Clone URL** field and select **Import**
 
 
      ![importrepository](images/importrepository.png)
@@ -58,101 +65,78 @@ to open an ARM template for creating required App Services.
 
    ![cloneinvisualstudio](images/cloneinvisualstudio.png)
 
-1. When the code open in Visual Studio, if you are prompted to sign into VSTS use the same credentials that you used to create account above
-
-4. Select **Clone**.
+1. When the code opens in Visual Studio, if you are prompted to sign into Visual Studio Team Services, use the same credentials(that you used above to create account) and select **Clone**
 
      ![clonepath](images/clonepath.png)
 
 
-5. In Team Explorer under **Solutions**, you will see **PartsUnlimited.sln** available in the local git folder. Double click on **PartsUnlimited.sln** to open the project.
+1. In Team Explorer under **Solutions**, you will see **PartsUnlimited.sln** available in the local git folder. Double click on **PartsUnlimited.sln** to open the solution.
 
      ![openproject](images/openproject.png)
 
 
-
-
 ## Exercise 1:  Set up an Azure Function
 
-Azure Functions App is the container that hosts the execution of individual functions. A function app lets you group functions as a logic unit for easier management, deployment, and sharing of resources. In this exercise, you will create **Azure Function App** from Azure portal and then you will create **Azure Functions project** in PartsUnlimited Solution using Visual Studio.
+ In this exercise, you will create an **Azure Function App** from the Azure portal and then you will add code by creating an **Azure Functions project** in Visual Studio.
 
 The [Azure Functions](https://azure.microsoft.com/en-in/services/functions/) created in this exercise will act as a switching proxy or mechanism to return different (discount) information based on the user logged in to the application.
 Although we have used a simple condition here, this could also use more complex rules which could potentially be hidden behind another web api call.
 
-1. Navigate to the Azure portal https://portal.azure.com
+1. Go back to the **Azure Portal**. Click the **Cloud Shell** button on the menu in the upper right of the Azure portal.
 
-2. Click on **Resources Groups**, select the resource group. In **Overview** page select **Add**.
+1. In **Cloud Shell** run the following commands to create a  **Storage account** and an **Azure Function**. Functions uses an **Azure Storage** to maintain state and other information about your functions.
 
-   ![addazurefunction](images/addazurefunction.png)
+   ```
+    az storage account create --name functionsstorage123 --location westus --resource-group 
+    @lab.CloudResourceGroup(268).Name --sku Standard_LRS
+   ```
 
-3. Filter down options by typing **Function App**, click on **Function App** option, then select **Create**.
+   ```
+   az functionapp create --deployment-source-url https://github.com/sriramdasbalaji/azurefunctionsample --resource-group @lab.CloudResourceGroup(268).Name --consumption-plan-location westus --name FeatureFlagforAPI --storage-account  functionsstorage123
+   ```
 
-    ![filterfunctionapp](images/filterfunctionapp.png)
-
-4.  Enter a name for your Function App, choose your subscription, select **App Service Plan** as your **Hosting plan** and click on **Create**.
-
-    ![createfunctionapp](images/createfunctionapp.png)
-
-5. Navigate to the resource group where you added your Azure function and click on it.
+1. After running the above commands navigate to the @lab.CloudResourceGroup(268). You will see an **Azure Function App**.
 
     ![openazurefunction](images/openazurefunction.png)
 
-   You will see Function App is deployed successfully and status of the app as *Running*
+   Select **FeatureFlagforAPI**. You will see Function App is deployed successfully and status of the app as **Running**
 
    ![functionappstatus](images/functionappstatus.png)
 
    
-6. Select **Functions** in your function app and click on Add icon. Select **create your own custom function**. Then click on **Create this function**.
+1. Now you will create **Azure Functions Project** in Visual Studio to write the code.  In this Azure Functions Project, you will write code to redirect the APIs based on the user login to return different (discount) information.
 
-   ![createfuntion](images/createfuntion.png)
-  
-7. Select **HTTP trigger**.
-
-    ![selecthttptrigger](images/selecthttptrigger.png)
-
-    Enter the details as shown below and click on Create. Select language as **C#** and  for Name enter **SpecialsProxy**
-
-    ![httptriggerdetails](images/httptriggerdetails.png)
-
-8. Once the Function is created, select the Function and click on **Get Function Url**
-   
-   ![getfunctionurl](images/getfunctionurl.png)
-
-   Copy the URL and save to notepad. You will need this URL later on.
-
-   ![copyurl](images/copyurl.png)
-
-9. Now you will create **Azure Functions Project** using Visual Studio in PartsUnlimited solution. Then you will build and deploy Azure Functions using VSTS. In this Azure Functions Project, you will write code to redirect the API v1/v2 based on the user login. Open the **Visual Studio**.
+1. Open **Visual Studio**.
 Right click on solution, select **Add** and select **New Project**.
 
    ![createazurefunctionproject](images/createazurefunctionproject.png)
 
-10. Select **Cloud** under **Visual C#** category, select **Azure Functions** as the type of this project, enter **PartsUnlimited.AzureFunction** into the name field and append **\src** at the end of the location, then click on "OK".
+1. Select **Cloud** under **Visual C#** category, select **Azure Functions** as the type of this project, enter **PartsUnlimited.AzureFunction** into the name field and append **\src** at the end of the location, then click **OK**.
 
      ![azurefunctionprojdetails](images/azurefunctionprojdetails.png)
 
-     Select **HttpTrigger** template and click on **OK**
+     Select **HttpTrigger** template and click **OK**
     
 
     ![httptrigger](images/httptrigger.png)
 
-11. Expand the **PartsUnlimited.AzureFunction** project, right click on **Function 1.cs** and select **Rename**. Rename the file as **SpecialsProxy**
+1. Expand the **PartsUnlimited.AzureFunction** project, right click on **Function 1.cs** and select **Rename**. Rename the file as **SpecialsProxy**
 
     ![renamefunction](images/renamefunction.png)
 
-12. Open the **SpecialsProxy.cs** file, replace the existing code with the following code.
- ```csharp
-using System;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs.Host;
+1. Open the **SpecialsProxy.cs** file, replace the existing code with the following code.
+   ```csharp
+     using System;
+     using System.Linq;
+     using System.Net;
+     using System.Net.Http;
+     using System.Threading.Tasks;
+     using Microsoft.Azure.WebJobs;
+     using Microsoft.Azure.WebJobs.Extensions.Http;
+     using Microsoft.Azure.WebJobs.Host;
 
-namespace PartsUnlimited.AzureFunction
-{
+     namespace PartsUnlimited.AzureFunction
+    {
     public static class SpecialsProxy
     {
         [FunctionName("SpecialsProxy")]
@@ -160,38 +144,37 @@ namespace PartsUnlimited.AzureFunction
         {
             var userIdKey = req.GetQueryNameValuePairs().FirstOrDefault(q => string.Equals(q.Key, "UserId", StringComparison.OrdinalIgnoreCase));
             var userId = string.IsNullOrEmpty(userIdKey.Value) ? int.MaxValue : Convert.ToInt64(userIdKey.Value);
-            var url = $"https://YourAppServiceUrl.azurewebsites.net/api/{(userId > 10 ? "v1" : "v2")}/specials/GetSpecialsByUserId?id={userId}";
+            var url = $"https://YourAPIAppServiceUrl.azurewebsites.net/api/{(userId > 10 ? "v1" : "v2")}/specials/GetSpecialsByUserId?id={userId}";
             using (HttpClient httpClient = new HttpClient())
             {
                 return await httpClient.GetAsync(url);
             }
         }
     }
-}
-```
->Replace YourAppServiceUrl in url variable with URL for the App Service with your API.
+   }
+   ```
 
+   > Replace **YourAPIAppServiceUrl** in url variable with API app service name.This would like as **PartsUnlimited-API-XXXXXXX**
 
-
-13.  Open StoreController located at PartsUnlimitedWebsite > Controllers > StoreController.cs
+1. Open **StoreController.cs** from the path **PartsUnlimitedWebsite > Controllers > StoreController.cs**
 
      ![openstorecontroller](images/openstorecontroller.png)
 
-2. Replace the code with the following snippet
-  ```csharp
-  // Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using PartsUnlimited.Models;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-namespace PartsUnlimited.Controllers
-{
+1. Replace the code with the following code snippet
+    ```csharp
+    // Copyright (c) Microsoft. All rights reserved.
+    // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Caching.Memory;
+    using PartsUnlimited.Models;
+    using System;
+    using System.Linq;
+    using System.Collections.Generic;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+    using Newtonsoft.Json;
+    namespace PartsUnlimited.Controllers
+    {
     public class StoreController : Controller
     {
         private readonly IPartsUnlimitedContext _db;
@@ -258,105 +241,131 @@ namespace PartsUnlimited.Controllers
             return View(productData);
         }
     }
-}
-```
->Note 
->1. You have to replace url variable's value with your full Azure Function's URL which we have copied in **Exercise 4** including its code parameter at the end.
->2. Only Administrator@test.com will be able to see version 2 of the API output. Credentials for this account can be found bellow or in config.json file which is located in the root of PartsUnlimitedWebsite project:
-  ```csharp
-  "AdminRole": {
-    "UserName": "Administrator@test.com",
-    "Password": "YouShouldChangeThisPassword1!"
-}
-```
+   }
+   ```
 
 
 
-15. Click on **Changes** in **Team Explorer** and push the changes to the server
+
+1. Click  **Changes** in **Team Explorer** and push the changes to the server
 
       ![pushfunctionproject](images/pushfucntionproject.png)
       
-## Exercise 2: Build Azure Functions project in VSTS
-
-## Exercise 6: Build and Deploy Azure Functions project in VSTS
-In this exercise we will modify the Build and Release definitions to build Azure Functions project and deploy the azure function to the Function app which we created.
-
-1.  In your VSTS account click on **Build and Release** hub and select **PartsUnlimkted-CI** and click on **Edit**
-
-    ![openbuilddefinition](images/openbuilddefinition.png)
-
-2. Add  **src\PartsUnlimited.AzureFunction\PartsUnlimited.AzureFunction.csproj** in Build Task and Publish Task as shown below
-
-    ![buildtask](images/buildtask.png)
-    ![publishtask](images/publishtask.png)
-
-   We now included Azure functions project in build definition to Build and create a package for Azure Function Project.
-
-3. Now click on **Save & Queue**. 
-    You will see a build has been queued. Click on Build Number to see the progress of the build.
-
-    ![buildqueued](images/buildqueued.png)
-     ![buildoutcome](images/buildoutcome.png)
-
-4. Once Build Succeeded Click on the **Releases** tab. Select **AzureFunctions_Deploy** release definition and click **Edit**
-
-   ![openreleasedef](images/openreleasedef.png)
-
-5. Click on **Dev** to view the deployment tasks in the definition
-
-    ![opendevenv2](images/opendevenv2.png)
-
-6. You have two tasks in the release definition.
-
-   ![tasksinrelease2](images/tasksinrelease2.png)
-
-7. Now we will add one more task to deploy Azure Function to the Function App in Azure.
-Click on **+** icon and add **Azure App Service deploy** Task
-
-   ![addappservicetask](images/addappservicetask.png)
-
-8. In the new task set the following parameters as shown in image
-
-   > App Type: Function App
-
-   > App Service Name: Function App which we have created in previuous exercise
-
-   >Package or Folder: $(System.DefaultWorkingDirectory)/**/PartsUnlimited.AzureFunction.zip
-
-   ![deployazurefunction](images/deployazurefunction.png)
-
+## Exercise 2: Set up continuous integration
+1. Go back to the **VSTS** portal.
+ On the **Files** tab of the **Code** hub, click **Set up build**.
    
+   ![setupbuild](images/setupbuild.png)
 
-9. Save the changes and Trigger the Release to deploy modified web site and the Azure function.
+1. You are taken to the **Build and Release** hub in VSTS and asked to **Choose a template**.
+In the right panel, select **ASP.NET Core**, and then click **Apply**.
+   ![selecttemplate](images/selecttemplate.png)
 
-   ![saveandqueuerelease](images/saveandqueuerelease.png)
+   > Building  **Azure Functions Project** is same as building **ASP.NET Core** apps.
+1. You now see all the tasks that were automatically added to the build definition by the template. These are the steps that will automatically run every time you push code changes.
+    
+      ![buildtasks](images/buildtasks.png)
+1. Select **Publish** task. Uncheck the **Publish Web Projects** field and enter ****/*.csproj** in **Path to Projects** filed.
 
-   You will see a Release has been queued. Click on the Release number to see the Release progress.
 
-   ![releasestatus](images/releasequeue.png)
+   ![buildpublishtask](images/buildpublishtask.png)
+1. Click the **Triggers** tab in the build definition. Enable the **Continuous Integration** trigger. This will ensure that the build process is automatically triggered every time you commit a change to your repository.
+      
+    ![citrigger](images/citrigger.png)
 
-   ![releaseoutcome2](images/releaseoutcome2.png)
+1. Select **Save & queue** to kick off your first build. On the **Save build definition and queue** dialog, select **Save & queue**.
 
-10. Once the Release is success, you can verify Website that you deployed calls the APIs.
+1. A new build is started. You'll see a link to the new build on the top of the page. Click the link to watch the new build as it happens. Wait for the build to complete and succeed before proceeding to the next section.
+![buildqueued2](images/buildqueued2.png)
 
-## Exercise 7: Verify Website
+## Exercise 3: Setup continuous deployment
+
+1. Once the build succeeds, click the **Release** action on the build summary page.
+  ![selectrelease](images/selectrelease.png)
+
+1. In the **Select a Template** panel, click the **Empty Process**.
+     ![releaseemptyprocess](images/releaseemptyprocess.png)
+
+1. Select the artifact trigger and make sure the **Continuous deployment trigger** is enabled.
+
+     ![cdtrigger](images/cdtrigger.png)
+
+1. Click **Tasks**, and then select **Add task to the Phase** to add the deployment tasks.
+
+    ![releasetasks](images/releasetasks.png)
+
+1. In **Add tasks** panel under **Deploy** section select **Azure App Service Deployment** task. Add this task three times.
+
+   ![addazureappservicetask](images/addazureappservicetask.png)
+
+   > Configure the inputs for the **Deploy Azure App Service** tasks in the release definition. First, select the name of the **Azure subscription**  if there is an **Authorize** button next to the input, click on it to authorize VSTS to connect to your Azure subscription
+1. Select the first **Azure App Service Deployment** task and configure the inputs as shown below.
+     ![websitedeploytask](images/websitedeploytask.png)
+
+   This task is to deploy **PartsUnlimited Website**.
+
+1. Select the second task and configure the inputs as shown below.
+
+   ![apideploytask](images/apideploytask.png)
+ This task is to deploy **PartsUnlimited APIs**.
+1. Select the third task and configure the inputs  as shown below.
+
+   ![functionappdeploy](images/functionappdeploy.png)
+  This task is to deploy **PartsUnlimited Azure Function**.
+
+1. Click **Save**. In the Save dialog box, click **OK**. To test the release definition, click **Release** and then **Create Release**.
+  
+   ![createrelease](images/createrelease.png)
+
+   On the Create new release dialog box, click **Create**.
+
+1. You will notice a new release being created. Select the link to navigate to the release.
+
+   ![releasetriggered](images/releasetriggered.png)
+You can watch the live logs for the deployment as it happens. Wait for the release to be deployed to the Azure web app.
+    ![releaselogs](images/releaselogs.png)
+
+ Wait for the release to complete and succeed before proceeding to the next section.
+
+## Exercise 4: Update the Azure Function url in site.
+1. Go back to the **Azure Portal**. Select **FeatureflagforAPI** Azure Function app in **@lab.CloudResourceGroup(268).Name**
+![openazurefunction](images/openazurefunction.png)
+
+1. Select **SpecialsProxy** in Functions and click **Get Function Url**
+
+   ![selectazurefunction](images/selectazurefunction.png)
+
+1. **Copy** the function url.
+
+   ![copyazurefunctionurl](images/copyfunctionurl.png)
+1. Now open **Visual Studio**. Navigate to **StoreController.cs** from the path **PartsUnlimitedWebsite > Controllers > StoreController.cs**
+
+1. In **StoreController.cs** replace the **url**  variable in line 46 with the **Function url** copied in previuous step.
+ ![updatefunctionurl](images/updatefunctionurl.png)
+
+1. Click **Changes** in Team Explorer and **Commit&Push** the changes to the server
+
+1. This change triggers a CI build in VSTS, and when the build completes, it triggers an automatic deployment to Azure app services configured in **Release**
+
+
+
+## Exercise 7: Verify the website
+
+1. Once deployment has completed, go to the **Azure portal**. In **
+@lab.CloudResourceGroup(268).Name** resource group select **PartsUnlimited-Web-xxxxx** and click **Browse**
+
+1. You will see the website as shown below. Navigate to **Oil** category, notice that products are showing Discount as **10%**.
+
+![verifywebsiteV1](images/verifywebsiteV1.png)
 
 1. Browse youe website and Navigate to **Oil** category without logging in, notice that products have V1 in their names, and showing Discount as 10% indicating they have been received from the original V1 controller which is for public users.
 
 ![verifywebsiteV1](images/verifywebsiteV1.png)
 
-2. Log in as user Administrator@test.com with password **YouShouldChangeThisPassword1!** and navigate to Oil category again. You will notice that for this user Azure function routes the request to V2 controller (which is for Employees) and shows V2 products and Discount 30%
+2. Now log in as user **Administrator@test.com** with password **YouShouldChangeThisPassword1!** and navigate to **Oil** category again. You will notice that for this user **Azure function** routes the request to other API and shows Discount as **30%**
 
    ![login](images/login.png)
 
    ![verifywebsiteV2](images/verifywebsiteV2.png)
-
-3. Log off from admin account and Create another account (public user) and login as that user. You will see V1 returned again.
-
-   ![newuser](images/newuser.png)
-
-   ![register](images/register.png)
-
-   ![verifywebsiteV1](images/verifywebsiteV1.png)
-
-You have connected PartsUnlimited website to the Web API and used Azure function to retrieve data from either v1 or v2 of the API based on the user ID.
+   
+   You have connected PartsUnlimited website to the Web API and used Azure function to retrieve data from either v1 or v2 of the API based on the user ID.
