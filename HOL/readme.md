@@ -349,7 +349,7 @@ You can watch the live logs for the deployment as it happens. Wait for the relea
 
 
 
-## Exercise 7: Verify the website
+## Exercise 5: Verify the website
 
 1. Once deployment has completed, go to the **Azure portal**. In **
 @lab.CloudResourceGroup(268).Name** resource group select **PartsUnlimited-Web-xxxxx** and click **Browse**
