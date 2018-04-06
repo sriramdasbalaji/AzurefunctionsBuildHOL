@@ -87,14 +87,14 @@ Although we have used a simple condition here, this could also use more complex 
 1. In **Cloud Shell** run the following commands to create a  **Storage account** and an **Azure Function**. Functions uses an **Azure Storage** to maintain state and other information about your functions.
 
    ```
-    az storage account create --name functionsstorage123 --location westus --resource-group 
+    az storage account create --name <storage_name> --location westus --resource-group 
     @lab.CloudResourceGroup(268).Name --sku Standard_LRS
    ```
 
    ```
-   az functionapp create --deployment-source-url https://github.com/sriramdasbalaji/azurefunctionsample --resource-group @lab.CloudResourceGroup(268).Name --consumption-plan-location westus --name FeatureFlagforAPI --storage-account  functionsstorage123
+   az functionapp create --deployment-source-url https://github.com/sriramdasbalaji/azurefunctionsample --resource-group @lab.CloudResourceGroup(268).Name --consumption-plan-location westus --name FeatureFlagforAPI --storage-account  <storage_name>
    ```
-
+   > [!ALERT]  In the above commands, substitute a globally unique storage account name where you see the **storage_name** placeholder. Storage account names must be between 3 and 24 characters in length and may contain numbers and lowercase letters only.
 1. After running the above commands navigate to the @lab.CloudResourceGroup(268). You will see an **Azure Function App**.
 
     ![openazurefunction](images/openazurefunction.png)
@@ -356,13 +356,9 @@ You can watch the live logs for the deployment as it happens. Wait for the relea
 
 1. You will see the website as shown below. Navigate to **Oil** category, notice that products are showing Discount as **10%**.
 
-![verifywebsiteV1](images/verifywebsiteV1.png)
+   ![verifywebsiteV1](images/verifywebsiteV1.png)
 
-1. Browse youe website and Navigate to **Oil** category without logging in, notice that products have V1 in their names, and showing Discount as 10% indicating they have been received from the original V1 controller which is for public users.
-
-![verifywebsiteV1](images/verifywebsiteV1.png)
-
-2. Now log in as user **Administrator@test.com** with password **YouShouldChangeThisPassword1!** and navigate to **Oil** category again. You will notice that for this user **Azure function** routes the request to other API and shows Discount as **30%**
+1. Now log in as user **Administrator@test.com** with password **YouShouldChangeThisPassword1!** and navigate to **Oil** category again. You will notice that for this user **Azure function** routes the request to other API and shows Discount as **30%**
 
    ![login](images/login.png)
 
