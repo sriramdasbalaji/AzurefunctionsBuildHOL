@@ -83,27 +83,32 @@ Next, we will provision a Team services account.
 The [Azure Functions](https://azure.microsoft.com/en-in/services/functions/) created in this exercise will act as a switching proxy or mechanism to return different (discount) information based on the user logged in to the application.
 Although we have used a simple condition here, this could also use more complex rules which could potentially be hidden behind another web api call.
 
-1. Go back to the **Azure Portal** and launch the **Cloud Shell**
+1. Go back to the **Azure Portal**. Select the **+Create a resource** button found on the upper left-hand corner of the Azure portal, then select **Compute > Function App**.
+          ![selectazurefunctionapp](images/selectazurefunctionapp.png)
 
-1. Run the following commands to create an **Azure Function** and the underlying **Storage account** to maintain state and other information about your functions.
 
-   ```
-    az storage account create --name <storage_name> --location westus --resource-group 
-    @lab.CloudResourceGroup(268).Name --sku Standard_LRS
-   ```
+1. Use the function app settings as specified in below image. Select **Create** to provision and deploy the function app. 
 
-   ```
-   az functionapp create --deployment-source-url https://github.com/sriramdasbalaji/azurefunctionsample --resource-group @lab.CloudResourceGroup(268).Name --consumption-plan-location westus --name FeatureFlagforAPI --storage-account  <storage_name>
-   ```
-   > [!ALERT]  In the above commands, substitute a globally unique storage account name where you see the **storage_name** placeholder. Storage account names must be between 3 and 24 characters in length and may contain numbers and lowercase letters only.
-1. After running the above commands, navigate to the @lab.CloudResourceGroup(268). You should see an Azure Storage account and Azure Function App with the name **FeatureFlagforAPI** created.
+     ![functionappsettings](images/functionappsettings.png)
 
-    ![openazurefunction](images/openazurefunction.png)
+1. Select the Notification icon in the upper-right corner of the portal and watch for the **Deployment succeeded** message. Select **Go to resource** to view your new function app.
+        ![notifications](images/notifications.png)
 
-1. Select the Function App to open it. The app should be deployed successfully and status of the app should show as **Running**
+1. Expand your new function app, then click the **+** button next to **Functions**.
 
-   ![functionappstatus](images/functionappstatus.png)
- 
+1. In the Get started quickly page, select **WebHook + API, Choose C# as language** for your function, and click **Create this function**. 
+
+     ![createazurefunction](images/createazurefunction.png)
+
+   >In this lab you are using **C#** as script language for your function, but you can create a function in any [supported language](https://docs.microsoft.com/en-us/azure/azure-functions/supported-languages).
+1. Select **HttpTriggerCSharp1** in Functions and click **</>Get Function Url**.
+
+    ![getazurefunctionurl](images/getazurefunctionurl.png)
+
+1. **Copy** the Azure Function URL and save to notepad. You will need this URL later on.
+
+      ![copytheazurefunctionurl](images/copyazurefunctionurl.png)
+
 1. Next you will add code to the Functions App. While there are many ways you could do it, you will use Visual Studio in this lab. You will write code to redirect to the right APIs based on the user login, to return different (discount) information.
 
 1. Return to Visual Studio. double click on the **PartsUnlimited.sln** solution to open it.
@@ -155,7 +160,7 @@ Although we have used a simple condition here, this could also use more complex 
    }
    ```
 
-   > Replace **YourAPIAppServiceUrl** in url variable with API app service name.This would look like as **PartsUnlimited-API-XXXXXXX**
+   > Replace **YourAPIAppServiceUrl** in url variable with API app service name.You can find this in **@lab.CloudResourceGroup(268).Name**. This would look like as **PartsUnlimited-API-XXXXXXX**. 
 
 1. Open **StoreController.cs** from the path **PartsUnlimitedWebsite > Controllers > StoreController.cs**
 
@@ -244,6 +249,8 @@ Although we have used a simple condition here, this could also use more complex 
     }
    }
    ```
+1. In **StoreController.cs** replace the **url**  variable in line 46 with the **Function url** copied in **step 7**.
+ ![updatefunctionurl](images/updatefunctionurl.png)
 
 1. Click **Changes** in **Team Explorer** and select **Commit all and Push** to push the changes to the remote repository
 
@@ -324,29 +331,9 @@ You can watch the live logs for the deployment as it happens. Wait for the relea
 
  Wait for the release to complete and succeed before proceeding to the next section.
 
-## Exercise 4: Update the Azure Function url in site.
-1. Go back to the **Azure Portal**. Select **FeatureflagforAPI** Azure Function app in **@lab.CloudResourceGroup(268).Name**
-![openazurefunction](images/openazurefunction.png)
-
-1. Select **SpecialsProxy** in Functions and click **Get Function Url**
-
-   ![selectazurefunction](images/selectazurefunction.png)
-
-1. **Copy** the function url.
-
-   ![copyazurefunctionurl](images/copyfunctionurl.png)
-1. Now open **Visual Studio**. Navigate to **StoreController.cs** from the path **PartsUnlimitedWebsite > Controllers > StoreController.cs**
-
-1. In **StoreController.cs** replace the **url**  variable in line 46 with the **Function url** copied in previuous step.
- ![updatefunctionurl](images/updatefunctionurl.png)
-
-1. Click **Changes** in Team Explorer and **Commit&Push** the changes to the server
-
-1. This change triggers a CI build in VSTS, and when the build completes, it triggers an automatic deployment to Azure app services configured in **Release**
 
 
-
-## Exercise 5: Verify the website
+## Exercise 4: Verify the website
 
 1. Once deployment has completed, go to the **Azure portal**. In **
 @lab.CloudResourceGroup(268).Name** resource group select **PartsUnlimited-Web-xxxxx** and click **Browse**
