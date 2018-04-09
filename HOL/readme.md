@@ -4,67 +4,75 @@
 
 **Azure Functions** is an event driven, compute-on-demand experience that extends the existing Azure application platform with capabilities to implement the code triggered by events occurring in Azure or third-party service as well as on-premises systems. Azure Functions allows developers to take action by connecting to data sources or messaging solutions thus making it easy to process and react to events. Developers can leverage Azure Functions to build HTTP-based API endpoints accessible by a wide range of applications, mobile and IoT devices.
  
-**Scenario for the lab:** In this lab, we are using a fictional eCommerce website - PartsUnlimited. The PartsUnlimited team decides to roll out a new feature called **special discount for *employees of PartsUnlimited*** and a **different discount for *general users***. In this lab, we will implement a .Net Core Web API which will contain information about products and price (including discounts) and an Azure Functions which acts as a switching mechanism to return different (discount) information based on the user logged in to the application.
-
 ## What is covered in this lab?
 
  In this lab, you will
-* Create a **Visual Studio Team Services** account
-* Clone the PartsUnlimited project from GitHub
-* Setup **Azure Function** in Azure portal
-* Create a **Azure Functions** project in Visual Studio
-* Setup a build definition in **Visual Studio Team Services** to build and test the code
-* Configure a CD pipeline in **Visual Studio Team Services** for Website, API and Azure Functions
+* Create a Visual Studio Team Services account and clone the PartsUnlimited project from GitHub
+* Setup Azure Function in Azure portal and add code via Visual Studio
+* Setup a build definition in Visual Studio Team Services to build and test the code
+* Configure a CD pipeline in Visual Studio Team Services for Website, API and Azure Functions
 
 ## Setting up the environment
 
 ### Part A: Provision the required Azure resources
 
-1. Open Internet Explorer and navigate to [https://portal.azure.com](https://portal.azure.com)
+ In this lab, we will be using a fictional eCommerce website - PartsUnlimited. The PartsUnlimited team wants to  roll out a new discount for its employees and customers and wants to build an Azure Function that will retrieve the right discount depending on whether the logged in user is an employee or a customer. 
+
+Let's create the Parts Unlimited web site. 
+
+1. Open your browser and navigate to [https://portal.azure.com](https://portal.azure.com)
 
 1. Login with the following username and password:
    > Username: ++@lab.CloudPortalCredential(1).Username++    
    > Password: ++@lab.CloudPortalCredential(1).Password++
 
 
-1. Enter **https://goo.gl/octfDu** to open an ARM template for creating required App Services.
+1. Enter **https://goo.gl/octfDu** to deploy a custom ARM template that contains the PartsUnlimited App.
+
 1. For the **Resource Group** field, select **Use exisiting** and pick 
 @lab.CloudResourceGroup(268).Name from the dropdown
 
-1. Agree to the Terms and conditions and click **Purchase**. It should take approximately 1-2 minutes to provision the resources. Once the deployment is successful, you will see the resources as shown.
+1. Agree to the terms and conditions and click **Purchase**. 
+
+    It should take approximately 1-2 minutes to provision the resources. Once the deployment is successful, you will see the resources as shown.
    ![azure_resources](images/azure_resources.png)
-  
-  ### Part B: Create Visual Studio Team Services account
-  1. Navigate to https://www.visualstudio.com/team-services/ in a separate tab. Select **Get Started for Free**.
-  1. You can use the same credentials used above to log in to Azure
+
+### Part B: Create Visual Studio Team Services account
+
+Next, we will provision a Team services account.
+
+1. Navigate to https://www.visualstudio.com/team-services/ in a separate tab. Select **Get Started for Free**.
+
+1. You can use the same credentials used above to log in to Azure
      > Username: ++@lab.CloudPortalCredential(1).Username++      
      > Password: ++@lab.CloudPortalCredential(1).Password++
 
-  1. Provide a name for your Visual Studio Team Services account and click **Continue** to start the creation process
+1. Provide a name for your Visual Studio Team Services account and click **Continue** to start the creation process
 
-  1. In 1-2 minutes your account should be ready with a default project **MyFirstProject** created.
+1. In 1-2 minutes your account should be ready with a default project **MyFirstProject** created.
 
 ### Part C: Import and clone the project repository
 
-1. Navigate to the **Code** hub. As you have not created any code yet you should see an empty repository. You can clone the remote repository to your local machine and start adding code. You can also import code from an another repository if you have existing code. For the purpose of this lab we will import it from **GitHub**.
-1. Select **import** and enter https://github.com/sriramdasbalaji/AzureFunctionsBuild.git in the **Clone URL** field and select **Import**
+1. Navigate to the **Code** hub. As you have not created any code yet, you should see an empty repository. You can clone the remote repository to your local machine and start adding code. You can also import code from an another repository if you have existing code.
 
+1. For the purpose of this lab we will import it from **GitHub**. Select **import** and enter https://github.com/sriramdasbalaji/AzureFunctionsBuild.git in the **Clone URL** field and select **Import**
 
      ![importrepository](images/importrepository.png)
 
       ![clonerepo](images/clonerepo.png)
 
-1. When the import is complete, you can clone it and open it in Visual Studio(or any other IDE). We will use Visual Studio. Select **Clone** and then select **Clone in Visual Studio**.
+1. When the import is complete, Select **Clone** and then select **Clone in Visual Studio**. 
 
    ![cloneinvisualstudio](images/cloneinvisualstudio.png)
+
+   Note that VSTS supports a wide avriety of IDEs including Eclipse, IntelliJ, XCode, Android Developer Studio, Visual Studio Code, Etc.,
 
 1. When the code opens in Visual Studio, if you are prompted to sign into Visual Studio Team Services, use the same credentials(that you used above to create account) and select **Clone**
 
      ![clonepath](images/clonepath.png)
 
 
-1. Once it is cloned, you should see **PartsUnlimited.sln** under **Solutions** in the Team Explorer.  Double click on **PartsUnlimited.sln** to open the solution.
-
+1. Once it is cloned, you should see **PartsUnlimited.sln** under **Solutions** in the Team Explorer.
      ![openproject](images/openproject.png)
 
 
@@ -92,7 +100,7 @@ Although we have used a simple condition here, this could also use more complex 
 
     ![openazurefunction](images/openazurefunction.png)
 
-1. Select the Function App to open it. The app should be deployed successfully and status of the app as **Running**
+1. Select the Function App to open it. The app should be deployed successfully and status of the app should show as **Running**
 
    ![functionappstatus](images/functionappstatus.png)
  
