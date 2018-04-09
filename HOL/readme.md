@@ -8,7 +8,7 @@
 
  In this lab, you will
 * Create a Visual Studio Team Services account and clone the PartsUnlimited project from GitHub
-* Setup Azure Function in Azure portal and add code via Visual Studio
+* Setup Azure Functions in Azure portal and add code via Visual Studio
 * Setup a build definition in Visual Studio Team Services to build and test the code
 * Configure a CD pipeline in Visual Studio Team Services for Website, API and Azure Functions
 
@@ -16,9 +16,9 @@
 
 ### Part A: Provision the required Azure resources
 
- In this lab, we will be using a fictional eCommerce website - PartsUnlimited. The PartsUnlimited team wants to  roll out a new discount for its employees and customers and wants to build an Azure Function that will retrieve the right discount depending on whether the logged in user is an employee or a customer. 
+ In this lab, you will be using a fictional eCommerce website - PartsUnlimited. The PartsUnlimited team wants to  roll out a new discount for its employees and customers and wants to build Azure Functions that will retrieve the right discount depending on whether the logged in user is an employee or a customer. 
 
-Let's create the Parts Unlimited web site. 
+Let's create the Parts Unlimited website. 
 
 1. Open your browser and navigate to [https://portal.azure.com](https://portal.azure.com)
 
@@ -29,8 +29,8 @@ Let's create the Parts Unlimited web site.
 
 1. Enter **https://goo.gl/octfDu** to deploy a custom ARM template that contains the PartsUnlimited App.
 
-1. For the **Resource Group** field, select **Use exisiting** and pick 
-@lab.CloudResourceGroup(268).Name from the dropdown
+1. For the **Resource Group** field, select **Use existing** and pick 
+@lab.CloudResourceGroup(268).Name from the dropdown.
 
 1. Agree to the terms and conditions and click **Purchase**. 
 
@@ -39,7 +39,7 @@ Let's create the Parts Unlimited web site.
 
 ### Part B: Create Visual Studio Team Services account
 
-Next, we will provision a Team services account.
+Next, you will provision a Team services account.
 
 1. Navigate to https://www.visualstudio.com/team-services/ in a separate tab. Select **Get Started for Free**.
 
@@ -47,27 +47,27 @@ Next, we will provision a Team services account.
      > Username: ++@lab.CloudPortalCredential(1).Username++      
      > Password: ++@lab.CloudPortalCredential(1).Password++
 
-1. Provide a name for your Visual Studio Team Services account and click **Continue** to start the creation process
+1. Provide a name for your Visual Studio Team Services account and click **Continue** to start the creation process.
 
-1. In 1-2 minutes your account should be ready with a default project **MyFirstProject** created.
+1. In 1-2 minutes, your account should be ready with a default project **MyFirstProject** created.
 
 ### Part C: Import and clone the project repository
 
-1. Navigate to the **Code** hub. As you have not created any code yet, you should see an empty repository. You can clone the remote repository to your local machine and start adding code. You can also import code from an another repository if you have existing code.
+1. Navigate to the **Code** hub. As you have not created any code yet, you will see an empty repository. You can clone the remote repository to your local machine and start adding code. You can also import code from an another repository if you have existing code.
 
-1. For the purpose of this lab we will import it from **GitHub**. Select **import** and enter https://github.com/sriramdasbalaji/AzureFunctionsBuild.git in the **Clone URL** field and select **Import**
+1. For the purpose of this lab, you will import it from **GitHub**. Select **import** and enter https://github.com/sriramdasbalaji/AzureFunctionsBuild.git in the **Clone URL** field and select **Import**
 
      ![importrepository](images/importrepository.png)
 
       ![clonerepo](images/clonerepo.png)
 
-1. When the import is complete, Select **Clone** and then select **Clone in Visual Studio**. 
+1. When the import is complete, select **Clone** and then select **Clone in Visual Studio**. 
 
    ![cloneinvisualstudio](images/cloneinvisualstudio.png)
 
-   Note that VSTS supports a wide avriety of IDEs including Eclipse, IntelliJ, XCode, Android Developer Studio, Visual Studio Code, Etc.,
+   Note that VSTS supports a wide variety of IDEs including Eclipse, IntelliJ, XCode, Android Developer Studio, Visual Studio Code, etc.
 
-1. When the code opens in Visual Studio, if you are prompted to sign into Visual Studio Team Services, use the same credentials(that you used above to create account) and select **Clone**
+1. When the code opens in Visual Studio, if you are prompted to sign into Visual Studio Team Services, use the same credentials(that you used above to create the VSTS account) and select **Clone**
 
      ![clonepath](images/clonepath.png)
 
@@ -76,12 +76,12 @@ Next, we will provision a Team services account.
      ![openproject](images/openproject.png)
 
 
-## Exercise 1:  Setup an Azure Function
+## Exercise 1:  Setup Azure Functions
 
- In this exercise, you will create an **Azure Function App** from the Azure portal and then you will add code by creating an **Azure Functions project** in Visual Studio.
+ In this exercise, you will create an **Azure Functions App** from the Azure portal and then add code by creating an **Azure Functions project** in Visual Studio.
 
 The [Azure Functions](https://azure.microsoft.com/en-in/services/functions/) created in this exercise will act as a switching proxy or mechanism to return different (discount) information based on the user logged in to the application.
-Although we have used a simple condition here, this could also use more complex rules which could potentially be hidden behind another web api call.
+Although you have used a simple condition here, this could also use more complex rules which could potentially be hidden behind another web api call.
 
 1. Go back to the **Azure Portal**. Select the **+Create a resource** button found on the upper left-hand corner of the Azure portal, then select **Compute > Function App**.
           ![selectazurefunctionapp](images/selectazurefunctionapp.png)
@@ -101,7 +101,7 @@ Although we have used a simple condition here, this could also use more complex 
 
      ![createazurefunction](images/createazurefunction.png)
 
-   >In this lab you are using **C#** as script language for your function, but you can create a function in any [supported language](https://docs.microsoft.com/en-us/azure/azure-functions/supported-languages).
+   >In this lab, you are using **C#** as script language for your function, but you can create a function in any [supported language](https://docs.microsoft.com/en-us/azure/azure-functions/supported-languages).
 1. Select **HttpTriggerCSharp1** in Functions and click **</>Get Function Url**.
 
     ![getazurefunctionurl](images/getazurefunctionurl.png)
@@ -112,7 +112,7 @@ Although we have used a simple condition here, this could also use more complex 
 
 1. Next you will add code to the Functions App. While there are many ways you could do it, you will use Visual Studio in this lab. You will write code to redirect to the right APIs based on the user login, to return different (discount) information.
 
-1. Return to Visual Studio. double click on the **PartsUnlimited.sln** solution to open it.
+1. Return to Visual Studio, double click on the **PartsUnlimited.sln** solution to open it.
 
 1. Right click on the solution and select **Add** and select **New Project**.
 
@@ -250,27 +250,27 @@ Although we have used a simple condition here, this could also use more complex 
     }
    }
    ```
-1. In **StoreController.cs** replace the **url**  variable in line 46 with the **Function url** copied in **step 7**.
+1. In **StoreController.cs**, replace the **url**  variable in line 46 with the **Function url** copied in **Step 7**.
  ![updatefunctionurl](images/updatefunctionurl.png)
 
-1. Click **Changes** in **Team Explorer** and select **Commit all and Push** to push the changes to the remote repository
+1. Click **Changes** in **Team Explorer**, provide a comment and select **Commit all and Push** to push the changes to the remote repository.
 
       ![pushfunctionproject](images/pushfucntionproject.png)
       
 ## Exercise 2: Setup continuous integration
 
-1. Return back to **VSTS**.  On the **Files** tab of the **Code** hub, click **Set up build**.
+1. Return to **VSTS**.  On the **Files** tab of the **Code** hub, click **Set up build**.
    
    ![setupbuild](images/setupbuild.png)
 
-1. This will take you to the **Build and Release** hub in VSTS. Building  **Azure Functions Project** is same as building **ASP.NET Core** apps.So,select **ASP.NET Core**, and then click **Apply**.
+1. This will take you to the **Build and Release** hub in VSTS. Building **Azure Functions Project** is similar to building **ASP.NET Core** apps. Select **ASP.NET Core**, and click **Apply**.
    ![selecttemplate](images/selecttemplate.png)
 
    
-1. You now see all the tasks that were automatically added to the build definition by the template. These are the steps that will automatically run every time you push code changes.
+1. Now you will see that the required tasks are automatically added to the build definition by the template. These are the steps that will automatically run every time you push code changes.
     
       ![buildtasks](images/buildtasks.png)
-1. Select **Publish** task. Uncheck the **Publish Web Projects** field and enter ****/*.csproj** in **Path to Projects** filed.
+1. Select **Publish** task. Uncheck the **Publish Web Projects** field and enter ****/*.csproj** in **Path to Projects** field.
 
 
    ![buildpublishtask](images/buildpublishtask.png)
@@ -278,7 +278,7 @@ Although we have used a simple condition here, this could also use more complex 
       
     ![citrigger](images/citrigger.png)
 
-1. Select **Save & queue** to kick off your first build. On the **Save build definition and queue** dialog, select **Save & queue**.
+1. Select **Save & queue** to start your first build. On the **Save build definition and queue** dialog, select **Save & queue**.
 
 1. A new build is started. You'll see a link to the new build on the top of the page. Click the link to watch the new build as it happens. Wait for the build to complete and succeed before proceeding to the next section.
 ![buildqueued2](images/buildqueued2.png)
