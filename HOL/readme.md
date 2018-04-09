@@ -76,7 +76,7 @@ Next, we will provision a Team services account.
      ![openproject](images/openproject.png)
 
 
-## Exercise 1:  Set up an Azure Function
+## Exercise 1:  Setup an Azure Function
 
  In this exercise, you will create an **Azure Function App** from the Azure portal and then you will add code by creating an **Azure Functions project** in Visual Studio.
 
@@ -92,7 +92,8 @@ Although we have used a simple condition here, this could also use more complex 
      ![functionappsettings](images/functionappsettings.png)
 
 1. Select the Notification icon in the upper-right corner of the portal and watch for the **Deployment succeeded** message. Select **Go to resource** to view your new function app.
-        ![notifications](images/notifications.png)
+
+    ![notifications](images/notifications.png)
 
 1. Expand your new function app, then click the **+** button next to **Functions**.
 
@@ -256,7 +257,7 @@ Although we have used a simple condition here, this could also use more complex 
 
       ![pushfunctionproject](images/pushfucntionproject.png)
       
-## Exercise 2: Set up continuous integration
+## Exercise 2: Setup continuous integration
 
 1. Return back to **VSTS**.  On the **Files** tab of the **Code** hub, click **Set up build**.
    
