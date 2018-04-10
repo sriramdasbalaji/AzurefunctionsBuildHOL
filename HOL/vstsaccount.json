@@ -38,8 +38,7 @@
             "location": "Central US",
             "apiVersion": "2014-04-01-preview",
             "properties": {
-                "operationType": "Create",
-                "accountName": "[variables('account')]"
+                "operationType": "Create"
             },
             "resources": [
                 {
