@@ -28,18 +28,18 @@
         }
     },
     "variables": {
-        "accountName": "[concat('BuildWorkshop-',uniqueString(resourceGroup().id))]",
+        "account": "[concat('BuildWorkshop-',uniqueString(resourceGroup().id))]",
         "projectName": "MyFirstProject"
     },
     "resources": [
         {
-            "name": "[variables('accountName')]",
+            "name": "[variables('account')]",
             "type": "microsoft.visualstudio/account",
             "location": "Central US",
             "apiVersion": "2014-04-01-preview",
             "properties": {
                 "operationType": "Create",
-                "accountName": "[variables('accountName')]"
+                "accountName": "[variables('account')]"
             },
             "resources": [
                 {
@@ -48,7 +48,7 @@
                     "location": "Central US",
                     "apiVersion": "2014-04-01-preview",
                     "dependsOn": [
-                        "[concat('microsoft.visualstudio/account/', variables('accountName'))]"
+                        "[concat('microsoft.visualstudio/account/', variables('account'))]"
                     ],
                     "properties": {
                         "ProcessTemplateId": "[parameters('processTemplateId')]",
