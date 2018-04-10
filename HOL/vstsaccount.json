@@ -1,0 +1,61 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+       
+        "processTemplateId": {
+            "type": "string",
+            "defaultValue": "6B724908-EF14-45CF-84F8-768B5384DA45",
+            "allowedValues": [
+                "6B724908-EF14-45CF-84F8-768B5384DA45",
+                "ADCC42AB-9882-485E-A3ED-7678F01F66BC",
+                "27450541-8E31-4150-9947-DC59F998FC01"
+            ],
+            "metadata": {
+                "description": "Scrum: 6B724908-EF14-45CF-84F8-768B5384DA45 / Agile: ADCC42AB-9882-485E-A3ED-7678F01F66BC / CMMI: 27450541-8E31-4150-9947-DC59F998FC01"
+            }
+        },
+        "versionControlOption": {
+            "type": "string",
+            "defaultValue": "Git",
+            "allowedValues": [
+                "Git",
+                "Tfvc"
+            ],
+            "metadata": {
+                "description": "The version control of the Visual Studio Team Services project's source code: Git or Tfvc."
+            }
+        }
+    },
+    "variables": {
+        "accountName": "[concat('BuildWorkshop-',uniqueString(resourceGroup().id))]",
+        "projectName": "MyFirstProject"
+    },
+    "resources": [
+        {
+            "name": "[variables('accountName')]",
+            "type": "microsoft.visualstudio/account",
+            "location": "Central US",
+            "apiVersion": "2014-04-01-preview",
+            "properties": {
+                "operationType": "Create",
+                "accountName": "[variables('accountName')]"
+            },
+            "resources": [
+                {
+                    "name": "[variables('projectName')]",
+                    "type": "project",
+                    "location": "Central US",
+                    "apiVersion": "2014-04-01-preview",
+                    "dependsOn": [
+                        "[concat('microsoft.visualstudio/account/', variables('accountName'))]"
+                    ],
+                    "properties": {
+                        "ProcessTemplateId": "[parameters('processTemplateId')]",
+                        "VersionControlOption": "[parameters('versionControlOption')]"
+                    }
+                }
+            ]
+        }
+    ]
+}
