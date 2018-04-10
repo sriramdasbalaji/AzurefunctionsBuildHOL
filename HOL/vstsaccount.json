@@ -2,10 +2,6 @@
     "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-       "accountName": {
-            "type": "string",
-            "defaultValue": "Buildworkshop"            
-        },
         "processTemplateId": {
             "type": "string",
             "defaultValue": "6B724908-EF14-45CF-84F8-768B5384DA45",
