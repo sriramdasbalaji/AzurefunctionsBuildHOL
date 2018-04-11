@@ -131,11 +131,7 @@ Although you have used a simple condition here, this could also use more complex
 
     ![httptrigger](images/httptrigger.png)
 
-1. Expand the **PartsUnlimited.AzureFunction** project, right click on **Function 1.cs** and select **Rename**. Rename the file as **SpecialsProxy**
-
-    ![renamefunction](images/renamefunction.png)
-
-1. Open the **SpecialsProxy.cs** file, replace the existing code with the following code.
+1. Expand the **PartsUnlimited.AzureFunction** project, open **Function 1.cs** and  replace the existing code with the following code.
    ```csharp
      using System;
      using System.Linq;
@@ -148,9 +144,9 @@ Although you have used a simple condition here, this could also use more complex
 
      namespace PartsUnlimited.AzureFunction
     {
-    public static class SpecialsProxy
+    public static class Function1
     {
-        [FunctionName("SpecialsProxy")]
+        [FunctionName("HttpTriggerCSharp1")]
         public static async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
         {
             var userIdKey = req.GetQueryNameValuePairs().FirstOrDefault(q => string.Equals(q.Key, "UserId", StringComparison.OrdinalIgnoreCase));
@@ -171,89 +167,7 @@ Although you have used a simple condition here, this could also use more complex
 
      ![openstorecontroller](images/openstorecontroller.png)
 
-1. Replace the code with the following code snippet
-    ```csharp
-    // Copyright (c) Microsoft. All rights reserved.
-    // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Caching.Memory;
-    using PartsUnlimited.Models;
-    using System;
-    using System.Linq;
-    using System.Collections.Generic;
-    using System.Net.Http;
-    using System.Threading.Tasks;
-    using Newtonsoft.Json;
-    namespace PartsUnlimited.Controllers
-    {
-    public class StoreController : Controller
-    {
-        private readonly IPartsUnlimitedContext _db;
-        private readonly IMemoryCache _cache;
 
-        public StoreController(IPartsUnlimitedContext context, IMemoryCache memoryCache)
-        {
-            _db = context;
-            _cache = memoryCache;
-        }
-
-        //
-        // GET: /Store/
-
-        public IActionResult Index()
-        {
-            var category = _db.Categories.ToList();
-
-            return View(category);
-        }
-
-        //
-        // GET: /Store/Browse?category=Brakes
-
-        public async Task<IActionResult> Browse(int categoryId)
-        {
-            // Retrieve category and its associated products from database
-            // TODO [EF] Swap to native support for loading related data when available
-            var categoryModel = _db.Categories.Single(g => g.CategoryId == categoryId);
-
-            if (categoryModel.Name.ToLower().Equals("oil"))
-            {
-                var url = "https://partsunlimitefunctionapp.azurewebsites.net/api/SpecialsProxy?code=1wsG38iUPkMaclh0zmFpZoRewYs5usBLSlOkM5JaKIF4WvbklkeQYg==";
-                if (HttpContext.User.Identity.IsAuthenticated)
-                {
-                    url += HttpContext.User.Identity.Name.Equals("Administrator@test.com") ? "&UserID=1" : "&UserID=50";
-                }
-                using (HttpClient client = new HttpClient())
-                {
-                    var jsonProducts = await client.GetStringAsync(url);
-                    var products = JsonConvert.DeserializeObject<List<Product>>(jsonProducts);
-                    foreach (Product product in products)
-                    {
-                        product.ProductId = _db.Products.First(a => a.SkuNumber == product.SkuNumber).ProductId;
-                    }
-
-                    categoryModel.Products = products;
-                }
-            }
-            else
-            {
-                categoryModel.Products = _db.Products.Where(a => a.CategoryId == categoryModel.CategoryId).ToList();
-            }
-            return View(categoryModel);
-        }
-        public IActionResult Details(int id)
-        {
-            Product productData;
-
-            productData = _db.Products.Single(a => a.ProductId == id);
-            productData.Category = _db.Categories.Single(g => g.CategoryId == productData.CategoryId);
-
-
-            return View(productData);
-        }
-    }
-   }
-   ```
 1. In **StoreController.cs**, replace the **url**  variable in line 46 with the **Function url** copied in **Step 7**.
  
  1. Click **Changes** in **Team Explorer**, provide a comment and select **Commit all and Push** to push the changes to the remote repository.
