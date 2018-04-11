@@ -176,39 +176,38 @@ Although you have used a simple condition here, this could also use more complex
       
 ## Exercise 2: Setup continuous integration
 
-Next in this exercise, we will setup a CI and CD pipeline. Let's start with build first. 
+Next, in this exercise, we will setup a CI and CD pipeline to deploy the Azure Functions app. Let's start with build first. 
 
-1. Return to **VSTS**.  On the **Files** tab of the **Code** hub, click **Set up build**.
+1. On the **Files** tab of the **Code** hub, select **Set up build**.
    
    ![setupbuild](images/setupbuild.png)
 
-1. This will take you to the **Build and Release** hub in VSTS. It's super easy to setup the build pipeline with the new **ASP.NET Core** template. Select **ASP.NET Core**, and click **Apply**.
+1. This will take you to the **Build and Release** hub in VSTS. It's super easy to setup the build pipeline with the new **ASP.NET Core** template. Select *the template and click **Apply**.
    ![selecttemplate](images/selecttemplate.png)
 
    
-
-1. This should add a bunch of tasks to the the build definition. We can leave most of the the tasks untouched with just the default values. 
-    
+1. This should add a bunch of tasks to the the build definition. We can leave most of the the tasks untouched - the default values are fine.
       ![buildtasks](images/buildtasks.png)
 
-1. Select **Publish** task. Uncheck the **Publish Web Projects** field and enter **/*.csproj in **Path to Projects** field.
-
-
+1. You will only need to change the **Publish** task. Select the task and uncheck the **Publish Web Projects** field and enter **\**\**\/\*.csproj** in **Path to Projects** field. This will change -?
 
    ![buildpublishtask](images/buildpublishtask.png)
-1. Click the **Triggers** tab in the build definition. Enable the **Continuous Integration** trigger. This will ensure that the build process is automatically triggered every time you commit a change to your repository.
-      
-    ![citrigger](images/citrigger.png)
+   
+   
+1. Before we run the build. you will make this a CI build. Click the **Triggers** tab in the build definition. Enable the **Continuous Integration** trigger. This will ensure that the build process is automatically triggered every time you commit a change to your repository
 
-1. Select **Save & queue** to start your first build. On the **Save build definition and queue** dialog, select **Save & queue**.
+    ![CI Trigger](images/citrigger.png)
 
-1. A new build is started. You will see a link to the new build on the top of the page. Click the link to watch the live logs of the build as it happens. Wait for the build to complete and succeed before proceeding to the next section.
+1. Select **Save & queue** to save and start your first build.
+
+A new build is started. You will see a link to the new build on the top of the page. Click the link to watch the live logs of the build as it happens. Wait for the build to complete and succeed before proceeding to the next section.
+
 ![buildqueued2](images/buildqueued2.png)
 
 ## Exercise 3: Setup continuous deployment
 
 1. Once the build succeeds, click the **Release** action on the build summary page.
-  ![selectrelease](images/selectrelease.png)
+  ![Select Release](images/selectrelease.png)
 
 1. In the **Select a Template** panel, click the **Empty Process**.
      ![releaseemptyprocess](images/releaseemptyprocess.png)
@@ -225,7 +224,8 @@ Next in this exercise, we will setup a CI and CD pipeline. Let's start with buil
 
    ![addazureappservicetask](images/addazureappservicetask.png)
 
-   > Configure the inputs for the **Deploy Azure App Service** tasks in the release definition. First, select the name of the **Azure subscription**  if there is an **Authorize** button next to the input, click on it to authorize VSTS to connect to your Azure subscription
+   >To configure the inputs for the **Deploy Azure App Service** tasks in the release definitio, first select the **Azure subscription** and if there is an **Authorize** button next to the input, click on it to authorize Team Services to connect to the Azure subscription
+
 1. Select the first **Azure App Service Deployment** task and configure the inputs as shown below.
      ![websitedeploytask](images/websitedeploytask.png)
 
@@ -234,6 +234,7 @@ Next in this exercise, we will setup a CI and CD pipeline. Let's start with buil
 1. Select the second task and configure the inputs as shown below.
 
    ![apideploytask](images/apideploytask.png)
+
  This task is to deploy **PartsUnlimited APIs**.
 1. Select the third task and configure the inputs  as shown below.
 
@@ -249,6 +250,7 @@ Next in this exercise, we will setup a CI and CD pipeline. Let's start with buil
 1. You will notice a new release being created. Select the link to navigate to the release.
 
    ![releasetriggered](images/releasetriggered.png)
+   
 You can watch the live logs for the deployment as it happens. Wait for the release to be deployed to the Azure web app.
     ![releaselogs](images/releaselogs.png)
 
