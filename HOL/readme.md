@@ -259,17 +259,20 @@ Although you have used a simple condition here, this could also use more complex
       
 ## Exercise 2: Setup continuous integration
 
+Next in this exercise, we will setup a CI and CD pipeline. Let's start with build first. 
+
 1. Return to **VSTS**.  On the **Files** tab of the **Code** hub, click **Set up build**.
    
    ![setupbuild](images/setupbuild.png)
 
-1. This will take you to the **Build and Release** hub in VSTS. Building **Azure Functions Project** is similar to building **ASP.NET Core** apps. Select **ASP.NET Core**, and click **Apply**.
+1. This will take you to the **Build and Release** hub in VSTS. It's super easy to setup the build pipeline with the new **ASP.NET Core** template. Select **ASP.NET Core**, and click **Apply**.
    ![selecttemplate](images/selecttemplate.png)
 
    
-1. Now you will see that the required tasks are automatically added to the build definition by the template. These are the steps that will automatically run every time you push code changes.
+1. This should add a bunch of tasks to the the build definition. We can leave most of the the tasks untouched with just the default values. 
     
       ![buildtasks](images/buildtasks.png)
+
 1. Select **Publish** task. Uncheck the **Publish Web Projects** field and enter ****/*.csproj** in **Path to Projects** field.
 
 
