@@ -53,7 +53,7 @@ Next, you will provision a Team services account.
 
 ### Part C: Import and clone the project repository
 
-1. Navigate to the **Code** hub. As you have not created any code yet, you will see an empty repository. You can clone the remote repository to your local machine and start adding code. You can also import code from an another repository if you have existing code.
+1. Navigate to the **Code** hub. Since there is no code yet, you wil see an empty repository. You can clone the remote repository to your local machine and start adding code or you can import code from an another code repository.
 
 1. For the purpose of this lab, you will import it from **GitHub**. Select **import** and enter https://github.com/sriramdasbalaji/AzureFunctionsBuild.git in the **Clone URL** field and select **Import**
 
@@ -68,6 +68,10 @@ Next, you will provision a Team services account.
    Note that VSTS supports a wide variety of IDEs including Eclipse, IntelliJ, XCode, Android Developer Studio, Visual Studio Code, etc.
 
 1. When the code opens in Visual Studio, if you are prompted to sign into Visual Studio Team Services, use the same credentials(that you used above to create the VSTS account) and select **Clone**
+
+1. You can use the same credentials used above to log in to Azure
+     > Username: ++@lab.CloudPortalCredential(1).Username++      
+     > Password: ++@lab.CloudPortalCredential(1).Password++
 
      ![clonepath](images/clonepath.png)
 
@@ -110,7 +114,7 @@ Although you have used a simple condition here, this could also use more complex
 
       ![copytheazurefunctionurl](images/copyazurefunctionurl.png)
 
-1. Next you will add code to the Functions App. While there are many ways you could do it, you will use Visual Studio in this lab. You will write code to redirect to the right APIs based on the user login, to return different (discount) information.
+1. Next you will add code to the Functions App. While there are many ways of doing it, you will use Visual Studio in this lab. You will write code to redirect to the right APIs based on the user login, to return different (discount) information.
 
 1. Return to Visual Studio, double click on the **PartsUnlimited.sln** solution to open it.
 
@@ -122,7 +126,7 @@ Although you have used a simple condition here, this could also use more complex
 
      ![azurefunctionprojdetails](images/azurefunctionprojdetails.png)
 
-1. Select **HttpTrigger** template and click **OK**
+1. Select **HttpTrigger** template, **Azure Functions v1 (.NET Framework)** from the framework dropdown and click **OK**
     
 
     ![httptrigger](images/httptrigger.png)
@@ -151,7 +155,7 @@ Although you have used a simple condition here, this could also use more complex
         {
             var userIdKey = req.GetQueryNameValuePairs().FirstOrDefault(q => string.Equals(q.Key, "UserId", StringComparison.OrdinalIgnoreCase));
             var userId = string.IsNullOrEmpty(userIdKey.Value) ? int.MaxValue : Convert.ToInt64(userIdKey.Value);
-            var url = $"https://<<YourAPIAppServiceUrl>>.azurewebsites.net/api/{(userId > 10 ? "v1" : "v2")}/specials/GetSpecialsByUserId?id={userId}";
+            var url = $"https://<<YourAPIAppServiceUrl>>/api/{(userId > 10 ? "v1" : "v2")}/specials/GetSpecialsByUserId?id={userId}";
             using (HttpClient httpClient = new HttpClient())
             {
                 return await httpClient.GetAsync(url);
@@ -161,7 +165,7 @@ Although you have used a simple condition here, this could also use more complex
    }
    ```
 
-   > Replace **YourAPIAppServiceUrl** in url variable with API app service name.You can find this in **@lab.CloudResourceGroup(268).Name**. This would look like as **PartsUnlimited-API-XXXXXXX**. 
+1. Navigate to the resource group  **@lab.CloudResourceGroup(268).Name** in the Azure Portal. Click **PartsUnlimited-API-XXXXXXX.azurewebsites.net** and click the **Copy** icon under the **URL** section to copy the whole URL. Copy and replace **YourAPIAppServiceUrl** in url variable with API app service name. 
 
 1. Open **StoreController.cs** from the path **PartsUnlimitedWebsite > Controllers > StoreController.cs**
 
@@ -251,9 +255,8 @@ Although you have used a simple condition here, this could also use more complex
    }
    ```
 1. In **StoreController.cs**, replace the **url**  variable in line 46 with the **Function url** copied in **Step 7**.
- ![updatefunctionurl](images/updatefunctionurl.png)
-
-1. Click **Changes** in **Team Explorer**, provide a comment and select **Commit all and Push** to push the changes to the remote repository.
+ 
+ 1. Click **Changes** in **Team Explorer**, provide a comment and select **Commit all and Push** to push the changes to the remote repository.
 
       ![pushfunctionproject](images/pushfucntionproject.png)
       
@@ -269,11 +272,13 @@ Next in this exercise, we will setup a CI and CD pipeline. Let's start with buil
    ![selecttemplate](images/selecttemplate.png)
 
    
+
 1. This should add a bunch of tasks to the the build definition. We can leave most of the the tasks untouched with just the default values. 
     
       ![buildtasks](images/buildtasks.png)
 
-1. Select **Publish** task. Uncheck the **Publish Web Projects** field and enter ****/*.csproj** in **Path to Projects** field.
+1. Select **Publish** task. Uncheck the **Publish Web Projects** field and enter **/*.csproj in **Path to Projects** field.
+
 
 
    ![buildpublishtask](images/buildpublishtask.png)
@@ -283,7 +288,7 @@ Next in this exercise, we will setup a CI and CD pipeline. Let's start with buil
 
 1. Select **Save & queue** to start your first build. On the **Save build definition and queue** dialog, select **Save & queue**.
 
-1. A new build is started. You'll see a link to the new build on the top of the page. Click the link to watch the new build as it happens. Wait for the build to complete and succeed before proceeding to the next section.
+1. A new build is started. You will see a link to the new build on the top of the page. Click the link to watch the live logs of the build as it happens. Wait for the build to complete and succeed before proceeding to the next section.
 ![buildqueued2](images/buildqueued2.png)
 
 ## Exercise 3: Setup continuous deployment
@@ -339,10 +344,9 @@ You can watch the live logs for the deployment as it happens. Wait for the relea
 
 ## Exercise 4: Verify the website
 
-1. Once deployment has completed, go to the **Azure portal**. In **
-@lab.CloudResourceGroup(268).Name** resource group select **PartsUnlimited-Web-xxxxx** and click **Browse**
+1. Once deployment has completed, go to the **Azure portal**. In **@lab.CloudResourceGroup(268).Name** resource group select **PartsUnlimited-Web-xxxxx** and click **Browse**
 
-1. You will see the website as shown below. Navigate to **Oil** category, notice that products are showing Discount as **10%**.
+1. You will see the website as shown below. Navigate to **Oil** category, notice that products are showing discount as **10%**.
 
    ![verifywebsiteV1](images/verifywebsiteV1.png)
 
