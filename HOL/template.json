@@ -1,0 +1,62 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "accountName": {
+            "type": "String",
+            "defaultValue": "buildworkshop-"
+        },
+        "location": {
+            "type": "String",
+            "defaultValue": "Central US"
+        },
+        "projectName": {
+            "type": "String",
+            "defaultValue": "PartsUnlimited"
+        },
+        "processTemplateId": {
+            "type": "String",
+            "defaultValue": "ADCC42AB-9882-485E-A3ED-7678F01F66BC"
+        },
+       
+        "versionControlName": {
+            "type": "String",
+            "defaultValue": "Git"
+        },
+        "versionControlOption": {
+            "type": "String",
+            "defaultValue": "Git"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "microsoft.visualstudio/account",
+            "name": "concat([parameters('accountName')],uniqueString(resourseGroup().Id)",
+            "apiVersion": "2014-04-01-preview",
+            "location": "[parameters('location')]",
+            "properties": {
+                "operationType": "Create",
+                "accountName": "concat([parameters('accountName')],uniqueString(resourseGroup().Id)"
+               
+            },
+            "resources": [
+                {
+                    "type": "project",
+                    "name": "[parameters('projectName')]",
+                    "apiVersion": "2014-04-01-preview",
+                    "location": "[parameters('location')]",
+                    "properties": {
+                        "ProcessTemplateId": "[parameters('processTemplateId')]",
+                        "VersionControlOption": "[parameters('versionControlOption')]"
+
+                    },
+                    "dependsOn": [
+                        "[concat('microsoft.visualstudio/account/', parameters('accountName'))]"
+                    ]
+                }
+            ]
+        }
+    ],
+    "outputs": {}
+}
