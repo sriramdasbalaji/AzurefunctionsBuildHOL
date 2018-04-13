@@ -4,7 +4,7 @@
     "parameters": {
         "accountName": {
             "type": "String",
-            "defaultValue": "buildworkshop-"
+            "defaultValue": "buildworkshop"
         },
         "location": {
             "type": "String",
@@ -18,7 +18,10 @@
             "type": "String",
             "defaultValue": "ADCC42AB-9882-485E-A3ED-7678F01F66BC"
         },
-       
+        "processTemplateName": {
+            "type": "String",
+            "defaultValue": "Git"
+        },
         "versionControlName": {
             "type": "String",
             "defaultValue": "Git"
@@ -26,19 +29,25 @@
         "versionControlOption": {
             "type": "String",
             "defaultValue": "Git"
+        },
+        "ownerUpn": {
+            "type": "String",
+            "defaultValue": ""
         }
     },
-    "variables": {},
+    "variables": {
+        "acctNameVar": "[concat('BuildWorkshop-',uniqueString(resourceGroup().id))]"
+    },
     "resources": [
         {
             "type": "microsoft.visualstudio/account",
-            "name": "concat([parameters('accountName')],uniqueString(resourseGroup().Id)",
+            "name": "[concat('BuildWorkshop-',uniqueString(resourceGroup().id))]",
             "apiVersion": "2014-04-01-preview",
             "location": "[parameters('location')]",
             "properties": {
                 "operationType": "Create",
-                "accountName": "concat([parameters('accountName')],uniqueString(resourseGroup().Id)"
-               
+                "accountName": "[concat('BuildWorkshop-',uniqueString(resourceGroup().id))]",
+                "ownerUpn": "[parameters('ownerUpn')]"
             },
             "resources": [
                 {
@@ -48,11 +57,11 @@
                     "location": "[parameters('location')]",
                     "properties": {
                         "ProcessTemplateId": "[parameters('processTemplateId')]",
-                        "VersionControlOption": "[parameters('versionControlOption')]"
-
+                        "VersionControlOption": "[parameters('versionControlOption')]",
+                        "ownerUpn": "[parameters('ownerUpn')]"
                     },
                     "dependsOn": [
-                        "[concat('microsoft.visualstudio/account/', parameters('accountName'))]"
+                        "[concat('microsoft.visualstudio/account/', variables('acctNameVar'))]"
                     ]
                 }
             ]
