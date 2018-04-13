@@ -42,7 +42,7 @@
             "location": "[parameters('location')]",
             "properties": {
                 "operationType": "Create",
-                "accountName": "buildworkshop18729278",
+                "accountName": "[concat('BuildWorkshop-',uniqueString(resourceGroup().id))]",
                 "ownerUpn": "[parameters('ownerUpn')]"
             },
             "resources": [
