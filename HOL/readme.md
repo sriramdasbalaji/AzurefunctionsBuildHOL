@@ -240,11 +240,11 @@ Next, in this exercise, you will look at the build definition to get an insight 
 
    ![releasetriggered](images/releasetriggered.png)
    
-You can watch the live logs for the deployment as it happens. Wait for the release to be deployed to the Azure web app.
+   You can watch the live logs for the deployment as it happens. Wait for the release to be deployed to the Azure web app.
 
-    ![releaselogs](images/releaselogs.png)
+      ![releaselogs](images/releaselogs.png)
 
- Wait for the release to complete and succeed before proceeding to the next section.
+   Wait for the release to complete and succeed before proceeding to the next section.
 
 
 
