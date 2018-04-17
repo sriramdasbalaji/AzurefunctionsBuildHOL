@@ -225,7 +225,7 @@ A new build is started. You will see a link to the new build on the top of the p
 
    This task is to deploy **PartsUnlimited Website**.
 
-    To authorize the **Azure Subscription**, first select the **Azure subscription** from the drop down and then the drop down within the **Authorize** button. Click the drop down, choose **Advanced Options** and authorize Team Services to connect to the Azure subscription.
+    To configure the inputs for the **Deploy Azure App Service** tasks in the release definition, first select the **Azure subscription** from the drop down and then the drop down within the **Authorize** button. Click the drop down, choose **Advanced Options** and authorize Team Services to connect to the Azure subscription.
 
      ![authorizeazure](images/authorizeazure.png)
 
