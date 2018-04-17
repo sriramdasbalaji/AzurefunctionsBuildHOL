@@ -14,11 +14,11 @@
 
 ## Setting up the environment
 
-### Part A: Provision the required Azure resources
+### Part A: Verify the created Azure resources
 
  In this lab, you will be using a fictional eCommerce website - PartsUnlimited. The PartsUnlimited team wants to  roll out a new discount for its employees and customers and wants to build Azure Functions that will retrieve the right discount depending on whether the logged in user is an employee or a customer. 
 
-Let's create the Parts Unlimited website. 
+Let us verify the resources created in the Azure Portal. 
 
 1. Open your browser and navigate to [https://portal.azure.com](https://portal.azure.com)
 
@@ -27,16 +27,9 @@ Let's create the Parts Unlimited website.
    > Password: ++@lab.CloudPortalCredential(1).Password++
 
 
-1. Enter **https://goo.gl/octfDu** to deploy a custom ARM template that contains the PartsUnlimited App.
+1. Navigate to the **Resource Groups** and select **@lab.CloudResourceGroup(268).Name** to view the resources. You should see 3 resources as shown below.
 
-1. For the **Resource Group** field, select **Use existing** and pick 
-@lab.CloudResourceGroup(268).Name from the dropdown.
-
-1. Agree to the terms and conditions and click **Purchase**. 
-
-    It should take approximately 1-2 minutes to provision the resources. Once the deployment is successful, you will see the resources as shown.
    ![azure_resources](images/azure_resources.png)
-
 ### Part B: Create Visual Studio Team Services account
 
 Next, you will provision a Team services account.
@@ -77,6 +70,7 @@ Next, you will provision a Team services account.
 
 
 1. Once it is cloned, you should see **PartsUnlimited.sln** under **Solutions** in the Team Explorer.
+
      ![openproject](images/openproject.png)
 
 
@@ -189,7 +183,7 @@ Next, in this exercise, we will setup a CI and CD pipeline to deploy the Azure F
 1. This should add a bunch of tasks to the the build definition. We can leave most of the the tasks untouched - the default values are fine.
       ![buildtasks](images/buildtasks.png)
 
-1. You will only need to change the **Publish** task. Select the task and uncheck the **Publish Web Projects** field and enter **\**\**\/\*.csproj** in **Path to Projects** field. This will change -?
+1. You will only need to change the **Publish** task. Select the task and uncheck the **Publish Web Projects** field and enter **\**\**\/\*.csproj** in **Path to Projects** field.
 
    ![buildpublishtask](images/buildpublishtask.png)
    
@@ -224,18 +218,23 @@ A new build is started. You will see a link to the new build on the top of the p
 
    ![addazureappservicetask](images/addazureappservicetask.png)
 
-   >To configure the inputs for the **Deploy Azure App Service** tasks in the release definitio, first select the **Azure subscription** and if there is an **Authorize** button next to the input, click on it to authorize Team Services to connect to the Azure subscription
+
 
 1. Select the first **Azure App Service Deployment** task and configure the inputs as shown below.
      ![websitedeploytask](images/websitedeploytask.png)
 
    This task is to deploy **PartsUnlimited Website**.
 
+    To authorize the **Azure Subscription**, first select the **Azure subscription** from the drop down and then the drop down within the **Authorize** button. Click the drop down, choose **Advanced Options** and authorize Team Services to connect to the Azure subscription.
+
+     ![authorizeazure](images/authorizeazure.png)
+
+    ![azureauth](images/azureauth.png)
 1. Select the second task and configure the inputs as shown below.
 
    ![apideploytask](images/apideploytask.png)
 
- This task is to deploy **PartsUnlimited APIs**.
+   This task is to deploy **PartsUnlimited APIs**.
 1. Select the third task and configure the inputs  as shown below.
 
    ![functionappdeploy](images/functionappdeploy.png)
@@ -251,7 +250,7 @@ A new build is started. You will see a link to the new build on the top of the p
 
    ![releasetriggered](images/releasetriggered.png)
    
-You can watch the live logs for the deployment as it happens. Wait for the release to be deployed to the Azure web app.
+   You can watch the live logs for the deployment as it happens. Wait for the release to be deployed to the Azure web app.
     ![releaselogs](images/releaselogs.png)
 
  Wait for the release to complete and succeed before proceeding to the next section.
@@ -266,7 +265,7 @@ You can watch the live logs for the deployment as it happens. Wait for the relea
 
    ![verifywebsiteV1](images/verifywebsiteV1.png)
 
-1. Now log in as user **Administrator@test.com** with password **YouShouldChangeThisPassword1!** and navigate to **Oil** category again. You will notice that for this user **Azure function** routes the request to other API and shows Discount as **30%**
+1. Now log in as user ++**Administrator@test.com**++ with password ++**YouShouldChangeThisPassword1!**++ and navigate to **Oil** category again. You will notice that for this user **Azure function** routes the request to other API and shows Discount as **30%**
 
    ![login](images/login.png)
 
