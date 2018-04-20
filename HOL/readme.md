@@ -218,26 +218,28 @@ A new build is started. You will see a link to the new build on the top of the p
 
    ![addazureappservicetask](images/addazureappservicetask.png)
 
+    > For all the Azure App service tasks select version **4.***
+    ![appservicetaskv4](images/appservicetaskv4.png)
 
 
 1. Select the first **Azure App Service Deployment** task and configure the inputs as shown below.
-     ![websitedeploytask](images/websitedeploytask.png)
+     ![websitedeploytask](images/PULWebDeploy.png)
 
    This task is to deploy **PartsUnlimited Website**.
 
-    To configure the inputs for the **Deploy Azure App Service** tasks in the release definition, first select the **Azure subscription** from the drop down and then the drop down within the **Authorize** button. Click the drop down, choose **Advanced Options** and authorize Team Services to connect to the Azure subscription.
+    To configure the inputs for the **Deploy Azure App Service** tasks in the release definition, first select the **Azure subscription** from the drop down and then the drop down within the **Authorize** button. Click the drop down, choose **Advanced Options** and select **@lab.CloudResourceGroup(268).Name** in Resource Group field then click **OK** to authorize Team Services to connect to the Azure subscription.
 
      ![authorizeazure](images/authorizeazure.png)
 
-    ![azureauth](images/azureauth.png)
+    ![azureauth](images/azureauth2.png)
 1. Select the second task and configure the inputs as shown below.
 
-   ![apideploytask](images/apideploytask.png)
+   ![apideploytask](images/PULAPIDeploy.png)
 
    This task is to deploy **PartsUnlimited APIs**.
 1. Select the third task and configure the inputs  as shown below.
 
-   ![functionappdeploy](images/functionappdeploy.png)
+   ![functionappdeploy](images/PUL_AzureFunctionDeploy.png)
   This task is to deploy **PartsUnlimited Azure Function**.
 
 1. Click **Save**. In the Save dialog box, click **OK**. To test the release definition, click **Release** and then **Create Release**.
