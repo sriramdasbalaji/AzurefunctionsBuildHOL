@@ -196,7 +196,7 @@ Next, in this exercise, we will setup a CI and CD pipeline to deploy the Azure F
 
 A new build is started. You will see a link to the new build on the top of the page. Click the link to watch the live logs of the build as it happens. Wait for the build to complete and succeed before proceeding to the next section.
 
-![buildqueued2](images/buildqueued2.png)
+   ![buildqueued2](images/buildqueued2.png)
 
 ## Exercise 3: Setup continuous deployment
 
@@ -218,7 +218,8 @@ A new build is started. You will see a link to the new build on the top of the p
 
    ![addazureappservicetask](images/addazureappservicetask.png)
 
-    > For all the Azure App service tasks select version **4.***
+    > For Azure App service tasks in Step 6,7 and 8 select task version **4.***
+
     ![appservicetaskv4](images/appservicetaskv4.png)
 
 
@@ -240,7 +241,8 @@ A new build is started. You will see a link to the new build on the top of the p
 1. Select the third task and configure the inputs  as shown below.
 
    ![functionappdeploy](images/PUL_AzureFunctionDeploy.png)
-  This task is to deploy **PartsUnlimited Azure Function**.
+
+   This task is to deploy **PartsUnlimited Azure Function**.
 
 1. Click **Save**. In the Save dialog box, click **OK**. To test the release definition, click **Release** and then **Create Release**.
   
